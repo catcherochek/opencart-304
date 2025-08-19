@@ -22,6 +22,8 @@ services:
       interval: 15s
       timeout: 5s
       retries: 10
+    networks:
+      - oc_net
 
   db:
     image: mysql:8.0
@@ -36,20 +38,21 @@ services:
       - "33060:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - oc_net
 
   adminer:
     image: adminer:latest
     container_name: oc_adminer
-    ports:
-      - "8081:8080"
+    #ports:
+    #  - "8081:8080"
     depends_on:
       - db
-
-  composer:
-    image: composer:2
-    working_dir: /app
-    volumes:
-      - ./:/app
+    networks:
+      - oc_net
 
 volumes:
   db_data:
+networks:
+  oc_net:
+    driver: bridge
